@@ -131,4 +131,61 @@ public class ATM {
 
     }
 
+    public static void transferFunds(User theUser, Scanner sc) {
+
+        // Initialize!
+        int fromAccount;
+        int toAccount;
+        double amount;
+        double accountBalance;
+
+        // Transfer FROM:
+
+        do {
+
+            System.out.printf("Enter the number (1-%d) of the account to transfer from:\n");
+            fromAccount = sc.nextInt() - 1;
+
+            if (fromAccount < 0 || fromAccount >= theUser.numAccounts()) {
+                System.out.println("Invalid input, please try again!");
+            }
+
+
+        } while (fromAccount < 0 || fromAccount >= theUser.numAccounts());
+
+        accountBalance = theUser.getAccountBalance(fromAccount);
+
+        // Get the acccount to transfer TO:
+
+        do {
+
+            System.out.printf("Enter the number (1-%d) of the account to transfer from:\n");
+            toAccount = sc.nextInt() - 1;
+
+            if (toAccount < 0 || toAccount >= theUser.numAccounts()) {
+                System.out.println("Invalid input, please try again!");
+            }
+
+        } while (toAccount < 0 || toAccount >= theUser.numAccounts());
+
+        // Get the amount to transfer!
+
+        do {
+            System.out.printf("Enter the amount to transfer (max $%.02f): $", accountBalance);
+            amount = sc.nextDouble();
+
+            if (amount < 0) {
+                System.out.println("Amount must be greater than zero!");
+            } else if (amount > accountBalance) {
+                System.out.println("Amount must not exceed account balance!");
+            }
+
+        } while (amount < 0 || amount > accountBalance);
+
+        // Finally, do the transfer:
+
+        theUser.addAccountTransaction(fromAccount, -1*amount, String.format("Transfer to account %s", theUser.getAccountUUID(toAccount)));
+        theUser.addAccountTransaction(fromAccount, amount, String.format("Transfer to account %s", theUser.getAccountUUID(toAccount)));
+
+    }
 }
